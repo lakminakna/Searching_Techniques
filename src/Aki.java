@@ -20,7 +20,7 @@ public class Aki extends javax.swing.JFrame {
         
          
     }
-    int[] array = new int[5]; 
+    int[] array = new int[5];
    
 
     /**
@@ -410,6 +410,7 @@ Random rd = new Random(); // creating Random object
     }//GEN-LAST:event_arrayButtonActionPerformed
 
     private void binaryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binaryButtonActionPerformed
+       long starttime=System.nanoTime();
         int arr[] = array;
         int value = Integer.valueOf(jTextFieldSearch.getText());
     int key = value;
@@ -425,6 +426,10 @@ Random rd = new Random(); // creating Random object
     } else if ( arr[fst] > key ) { binaryAnswer.setText("not found") ;
     } else if ( arr[lst] < key ) { binaryAnswer.setText("not found") ;
     } else binarySearch( fst,lst,arr,key,binaryAnswer );
+    long endtime= System.nanoTime();
+    long result=endtime-starttime;
+        //System.out.println(result);
+        binaryRuntime.setText((Long.toString(result) ));
     }//GEN-LAST:event_binaryButtonActionPerformed
   public static void binarySearch(int fst, int lst, int arr[], int key, javax.swing.JTextField binaryAnswer) {
     int mid = (fst + lst)/2;
@@ -440,9 +445,69 @@ Random rd = new Random(); // creating Random object
       else if ( key < arr[mid] ) { binarySearch( fst,mid,arr,key,binaryAnswer ); }
       else binaryAnswer.setText("not found") ;
     }
+    
   }
     private void jumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumpButtonActionPerformed
-        // TODO add your handling code here:
+      long starttime=System.nanoTime();
+        int arr[] = array;
+       Arrays.sort(arr);
+       int value = Integer.valueOf(jTextFieldSearch.getText());
+        int x = value; 
+  
+        // Find the index of 'x' using Jump Search 
+        int index = jumpSearch(arr, x,jumpAnswer);
+        if(index == -1){
+             jumpAnswer.setText("not found") ;
+        }else jumpAnswer.setText((Integer.toString(index) ));
+  
+        // Print the index where 'x' is located 
+           long endtime= System.nanoTime();
+
+        long result=endtime-starttime;
+        //System.out.println(result);
+        jumpRuntime.setText((Long.toString(result) ));   
+    }
+        public static int jumpSearch(int[] arr, int x,javax.swing.JTextField jumpAnswer) 
+    { 
+        int n = arr.length; 
+  
+        // Finding block size to be jumped 
+        int step = (int)Math.floor(Math.sqrt(n)); 
+  
+        // Finding the block where element is 
+        // present (if it is present) 
+        int prev = 0; 
+        while (arr[Math.min(step, n)-1] < x) 
+        { 
+            prev = step; 
+            step += (int)Math.floor(Math.sqrt(n)); 
+            if (prev >= n) 
+            return -1;
+        } 
+  
+        // Doing a linear search for x in block 
+        // beginning with prev. 
+        while (arr[prev] < x) 
+        { 
+            prev++; 
+  
+            // If we reached next block or end of 
+            // array, element is not present. 
+            if (prev == Math.min(step, n)) 
+              return -1;
+//            jumpAnswer.setText("not found") ;
+        } 
+  
+        // If element is found 
+        if (arr[prev] == x) 
+            return prev; 
+       // jumpAnswer.setText("not found") ;
+        return -1; 
+//        throw new IllegalStateException("not found");
+        
+       // jumpAnswer.setText(Integer.toString(return) );
+        
+     
     }//GEN-LAST:event_jumpButtonActionPerformed
    
     /**
