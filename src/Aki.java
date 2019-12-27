@@ -21,6 +21,7 @@ public class Aki extends javax.swing.JFrame {
          
     }
     int[] array = new int[5];
+     int[] newarray = new int[5];
    
 
     /**
@@ -229,6 +230,11 @@ public class Aki extends javax.swing.JFrame {
         });
 
         interpolationButton.setText("Interpolation");
+        interpolationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                interpolationButtonActionPerformed(evt);
+            }
+        });
 
         jumpButton.setText("Jump");
         jumpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -362,15 +368,16 @@ public class Aki extends javax.swing.JFrame {
     }//GEN-LAST:event_binaryRuntimeActionPerformed
 
     private void linearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linearButtonActionPerformed
-long starttime=System.nanoTime();
+          int arr[] = array;
+        long starttime=System.nanoTime();
         
- int size = array.length;
+ int size = arr.length;
 
   int value=Integer.valueOf(jTextFieldSearch.getText());
           
  
       for (int i=0 ;i< size; i++){
-         if(array[i]==value){
+         if(arr[i]==value){
            
             linearAnswer.setText((Integer.toString(i) ));
             break;
@@ -403,15 +410,17 @@ Random rd = new Random(); // creating Random object
          
       }
       array=arr;
+       newarray=arr;
        for (int i = 0; i < arr.length; i++) {
        
            System.out.print(" "+arr[i]);
       }
+       
     }//GEN-LAST:event_arrayButtonActionPerformed
 
     private void binaryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binaryButtonActionPerformed
        long starttime=System.nanoTime();
-        int arr[] = array;
+        int arr[] = newarray;
         int value = Integer.valueOf(jTextFieldSearch.getText());
     int key = value;
     int fst = 0;
@@ -449,7 +458,7 @@ Random rd = new Random(); // creating Random object
   }
     private void jumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumpButtonActionPerformed
       long starttime=System.nanoTime();
-        int arr[] = array;
+        int arr[] = newarray;
        Arrays.sort(arr);
        int value = Integer.valueOf(jTextFieldSearch.getText());
         int x = value; 
@@ -509,7 +518,62 @@ Random rd = new Random(); // creating Random object
         
      
     }//GEN-LAST:event_jumpButtonActionPerformed
-   
+
+    private void interpolationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interpolationButtonActionPerformed
+     int arr[] = newarray;
+     long starttime=System.nanoTime();
+       Arrays.sort(arr);
+       int x = Integer.valueOf(jTextFieldSearch.getText()); // Element to be searched 
+         int index = interpolationSearch(x,arr); 
+           
+         // If element was found 
+         if (index != -1) 
+               interpolationAnswer.setText((Integer.toString(index))); 
+            else
+               interpolationAnswer.setText("not found") ; 
+         long endtime= System.nanoTime();
+    long result=endtime-starttime;
+        //System.out.println(result);
+        interpolationRuntime.setText((Long.toString(result) ));
+    }  
+    public static int interpolationSearch(int x,int[] arr) 
+    { 
+        
+    
+        // Find indexes of two corners 
+        int lo = 0, hi = (arr.length - 1); 
+       
+        // Since array is sorted, an element present 
+        // in array must be in range defined by corner 
+        while (lo <= hi && x >= arr[lo] && x <= arr[hi]) 
+        {         
+  
+            if (lo == hi) 
+            { 
+                if (arr[lo] == x) return lo; 
+                return -1; 
+            } 
+         // Probing the position with keeping 
+            // uniform distribution in mind. 
+              
+            int pos = lo + (((hi-lo) / 
+                  (arr[hi]-arr[lo]))*(x - arr[lo])); 
+       
+            // Condition of target found 
+            if (arr[pos] == x) 
+                return pos; 
+       
+            // If x is larger, x is in upper part 
+            if (arr[pos] < x) 
+                lo = pos + 1; 
+       
+            // If x is smaller, x is in the lower part 
+            else
+                hi = pos - 1; 
+        } 
+        return -1; 
+    }//GEN-LAST:event_interpolationButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
